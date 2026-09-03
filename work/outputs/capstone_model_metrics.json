@@ -1,0 +1,29 @@
+{
+  "split": "client_grouped_seed42",
+  "n_clients_total": 32,
+  "n_holdout_clients": 6,
+  "train_rows": 27675,
+  "test_rows": 2325,
+  "test_base_rate": 0.391,
+  "label_base_rate_full": 0.542,
+  "random_forest": {
+    "roc_auc": 0.75,
+    "precision_at_20": 0.65,
+    "precision_at_50": 0.74
+  },
+  "decision_tree": {
+    "roc_auc": 0.742,
+    "precision_at_20": 0.65,
+    "precision_at_50": 0.66
+  },
+  "logistic_regression": {
+    "roc_auc": 0.7,
+    "precision_at_20": 0.35,
+    "precision_at_50": 0.4
+  },
+  "baseline": {
+    "roc_auc": 0.646,
+    "precision_at_20": 0.4,
+    "precision_at_50": 0.42
+  }
+}

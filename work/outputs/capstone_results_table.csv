@@ -1,0 +1,5 @@
+method,roc_auc,precision_at_20,precision_at_50
+baseline,0.646,0.4,0.42
+logistic_regression,0.7,0.35,0.4
+decision_tree_d5,0.742,0.65,0.66
+random_forest,0.75,0.65,0.74

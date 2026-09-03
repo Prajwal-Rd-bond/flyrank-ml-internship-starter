@@ -1,0 +1,11 @@
+feature,importance
+days_with_impressions,0.1349
+log_impressions_90d,0.1294
+avg_position,0.1094
+content_age_days,0.0924
+char_count,0.0384
+age_tier_365+,0.0368
+log_clicks_90d,0.0366
+word_count,0.0354
+ctr,0.0351
+scroll_rate,0.0339

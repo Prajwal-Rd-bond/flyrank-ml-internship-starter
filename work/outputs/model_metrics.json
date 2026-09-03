@@ -1,0 +1,10 @@
+{
+  "split": "client_grouped_seed42",
+  "test_rows": 2325,
+  "test_base_rate": 0.391,
+  "rf_roc_auc": 0.75,
+  "rf_p_at_20": 0.65,
+  "rf_p_at_50": 0.74,
+  "baseline_p_at_50": 0.42,
+  "lift_p50": 0.32
+}

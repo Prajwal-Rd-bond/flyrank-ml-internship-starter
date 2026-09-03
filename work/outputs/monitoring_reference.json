@@ -1,0 +1,32 @@
+{
+  "log_impressions_90d": {
+    "mean": 6.376,
+    "std": 2.597,
+    "median": 6.727
+  },
+  "avg_position": {
+    "mean": 16.812,
+    "std": 15.311,
+    "median": 11.3
+  },
+  "days_since_last_update": {
+    "mean": 47.929,
+    "std": 42.137,
+    "median": 22.0
+  },
+  "content_age_days": {
+    "mean": 259.485,
+    "std": 134.409,
+    "median": 236.0
+  },
+  "ctr": {
+    "mean": 0.301,
+    "std": 1.825,
+    "median": 0.07
+  },
+  "label_base_rate": {
+    "train": 0.555,
+    "alert_low": 0.455,
+    "alert_high": 0.655
+  }
+}
