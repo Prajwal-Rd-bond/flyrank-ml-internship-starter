@@ -1,4 +1,40 @@
-# FlyRank ML Internship — Starter Repo
+# FlyRank · Content Refresh Prioritisation
+
+**Applied ML internship workspace · Prajwal Ravi Devadiga**
+
+A capstone exploring how search-performance signals can help content editors decide which pages to review first. The workflow covers problem framing, feature and leakage audits, a transparent rule baseline, model comparison, client-grouped validation and an action playbook.
+
+[Capstone report](work/capstone_report.md) · [Capstone notebook](work/notebooks/capstone.ipynb) · [Validation audit](work/notebooks/w06_validation_audit.ipynb) · [Action playbook](work/notebooks/w07_action_playbook.ipynb)
+
+## Start with the evidence
+
+| What to review | Where to look |
+|---|---|
+| Problem, modelling choices and limitations | [Capstone report](work/capstone_report.md) |
+| Experiment implementation | [Assignment notebooks](work/notebooks/) and [capstone notebook](work/notebooks/capstone.ipynb) |
+| Saved evaluation summaries | [Metrics JSON](work/outputs/capstone_model_metrics.json) and [results table](work/outputs/capstone_results_table.csv) |
+| Validation and practical use | [Validation audit](work/notebooks/w06_validation_audit.ipynb) and [action playbook](work/notebooks/w07_action_playbook.ipynb) |
+
+### What the model is intended to support
+
+The capstone compares Logistic Regression, Decision Tree and Random Forest models with a rule-based baseline. It uses a client-grouped holdout to evaluate ranking pages for human review. The label describes decline within an observed window; it does not establish future traffic recovery or the causal effect of refreshing content.
+
+**Evaluation status:** the report and saved metrics need reconciliation. The report records Random Forest Precision@50 of 0.68, while the metrics JSON records 0.74 for the stated seed-42 split (2,325 test rows; base rate 0.391). Treat these as historical artifacts pending a fresh reproducible run, rather than a single verified headline result.
+
+## My work and the starter foundation
+
+- **My internship submissions:** the assignment notebooks and capstone report under [work/](work/), with saved summaries in [work/outputs/](work/outputs/).
+- **Supplied foundation:** the original [FlyRank starter template](https://github.com/flyrank-bih/flyrank-ml-internship-starter), training materials, anonymised sample, reference scripts and example outputs. These remain credited to FlyRank and the original contributors.
+- **Reference results:** the baseline/model comparison in the starter guide below belongs to the supplied reference pipeline. It is separate from the capstone evaluation above.
+
+**Stack:** Python · pandas · NumPy · scikit-learn · Jupyter/Colab · Matplotlib
+
+For environment setup, see [SETUP.md](SETUP.md). For data permissions and handling, see [DATA_USE.md](DATA_USE.md).
+
+<details>
+<summary>Original starter guide, notebook launchers and reference pipeline</summary>
+
+## FlyRank ML Internship — Starter Repo
 
 **Applied Search Intelligence: Google Search Ranking & Discoverability**
 
@@ -63,7 +99,7 @@ Badges not opening *your* copy? Colab's built-in opener always works: **File →
 ### Prefer local?
 
 ```bash
-git clone <this-repo-url>
+git clone https://github.com/Prajwal-Rd-bond/flyrank-ml-internship-starter.git
 cd flyrank-ml-internship-starter
 pip install -r requirements.txt          # or: uv pip install -r requirements.txt
 python scripts/run_all.py
@@ -103,7 +139,7 @@ That runs the whole pipeline on the bundled sample and writes results to `output
 05_build_pdf_report.py   a shareable PDF summary
 ```
 
-On the bundled sample, the learned model clearly beats the hand-written rule at picking the right
+In the supplied reference pipeline on the bundled sample, the learned model beats the hand-written rule at picking the right
 pages to review first (**Precision@50 ≈ 0.24 → 0.74**; the model number can land 0.68–0.74
 depending on library versions — the ~3x lift is the point). The notebooks compute these numbers
 live, so they always reflect the current data and environment.
@@ -145,3 +181,6 @@ build on — and the `skills/` folder here is the instruction library for your A
 ---
 
 *Track leads: Mirza Ašćerić (ML) · Hole (data engineering). Code under MIT (see `LICENSE`); data under `DATA_USE.md`.*
+
+
+</details>
