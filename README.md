@@ -12,14 +12,14 @@ A capstone exploring how search-performance signals can help content editors dec
 |---|---|
 | Problem, modelling choices and limitations | [Capstone report](work/capstone_report.md) |
 | Experiment implementation | [Assignment notebooks](work/notebooks/) and [capstone notebook](work/notebooks/capstone.ipynb) |
-| Saved evaluation summaries | [Metrics JSON](work/outputs/capstone_model_metrics.json) and [results table](work/outputs/capstone_results_table.csv) |
+| Saved evaluation summaries | [Metrics JSON](work/outputs/capstone_model_metrics.json) (includes model comparison, seed sensitivity and feature importances) |
 | Validation and practical use | [Validation audit](work/notebooks/w06_validation_audit.ipynb) and [action playbook](work/notebooks/w07_action_playbook.ipynb) |
 
 ### What the model is intended to support
 
 The capstone compares Logistic Regression, Decision Tree and Random Forest models with a rule-based baseline. It uses a client-grouped holdout to evaluate ranking pages for human review. The label describes decline within an observed window; it does not establish future traffic recovery or the causal effect of refreshing content.
 
-**Evaluation status:** the report and saved metrics need reconciliation. The report records Random Forest Precision@50 of 0.68, while the metrics JSON records 0.74 for the stated seed-42 split (2,325 test rows; base rate 0.391). Treat these as historical artifacts pending a fresh reproducible run, rather than a single verified headline result.
+**Evaluation status:** Random Forest Precision@50 is 68%, versus 42% for the baseline (26 percentage points higher). The seed-42 holdout contains 2,325 pages from 6 clients, with a declining-label base rate of 39.1%. Regenerate the notebook, metrics and reports with `python scripts/run_capstone.py` using the pinned capstone environment. These are exploratory current-state results with overlapping windows and full-snapshot preprocessing; see the report for limitations.
 
 ## My work and the starter foundation
 

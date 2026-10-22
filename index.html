@@ -97,152 +97,62 @@
 </head>
 <body>
 <div class="container">
-
-<h1>Content Refresh Prioritization</h1>
-<p class="subtitle">Applied Search Intelligence — FlyRank ML Internship 2026</p>
-<p class="author">Author: Prajwal &nbsp;|&nbsp; Lane: Refresh / Content Opportunity Scoring &nbsp;|&nbsp;
-<a href="https://github.com/Prajwal-Rd-bond/flyrank-ml-internship-starter">Repository</a></p>
-
-<div class="abstract">
-<strong>Abstract.</strong>
-Which content pages in a client's portfolio should a FlyRank editor review first for refresh,
-given limited weekly review capacity? Using an anonymized starter dataset of 30,000 pages
-across 32 clients, we built a transparent baseline scoring rule and compared it against three
-learned classifiers (logistic regression, decision tree, random forest) under a client-holdout
-validation design. The random forest achieved a ~3× lift in Precision@50 over the hand-written
-baseline rule (0.74 vs 0.24), meaning 37 of its top 50 candidates carried the observed
-declining label compared to 12 for the baseline. The output is a ranked review queue with
-reason codes and suggested actions — decision-support for human editors, not an automated
-publishing decision.
+<h1>Content refresh prioritisation</h1><p class="author">Prajwal Ravi Devadiga · FlyRank ML Internship</p>
+<h2>Measured result</h2>
+<p>Random Forest Precision@50 is 68%, versus 42% for the baseline (26 percentage points higher). The seed-42 holdout contains 2,325 pages from 6 clients, with a declining-label base rate of 39.1%.</p>
+<p>This exploratory study ranks pages by observed impression decline. It does not predict future traffic or demonstrate that refreshing a page improves its performance.</p>
+<h2>Question and data</h2>
+<p>Can content and search signals help an editor prioritise a hypothetical budget of 50 page reviews? Precision@50 measures how many selected pages carry the observed declining label.</p>
+<p>The bundled FlyRank sample contains 30,000 retained pages across 32 pseudonymous clients. Keep pages with positive 90-day impressions and content age of at least 90 days; deduplicate content IDs. The target is trend_direction == down.</p>
+<p>Direct trend variables, last/previous 30-day ingredients and IDs are excluded from features. IDs are used only for deduplication and grouped splitting. Published outputs are aggregate summaries; no action queue or additional dataset is committed.</p>
+<h2>Baseline and models</h2>
+<p>Baseline score = 0.45 × visibility percentile + 0.35 × staleness percentile + 0.20 × positive CTR-gap percentile. Expected CTR is the median for each position tier among pages with positions above zero and at most 50; unmapped tiers fall back to observed CTR. Nonpositive positions receive zero CTR-gap contribution.</p>
+<p>Baseline ranks, CTR medians and categorical vocabulary are computed from the full unlabelled snapshot. This transductive setup is retained to reproduce the original experiment. Model fitting uses training clients only.</p>
+<p>The Random Forest uses 200 trees, maximum depth 10, minimum leaf size 25, balanced_subsample weights and random_state=42. Comparators are scaled balanced Logistic Regression (max_iter=1000) and a balanced depth-5 Decision Tree (minimum leaf size 50). Inputs are the 18 numeric and 8 categorical features listed in scripts/ml_utils.py.</p>
+<h2>Client-grouped holdout</h2>
+<p>Seed 42 selects 6 of 32 clients for testing, leaving 27,675 training pages. Assertions verify no client overlap and exclude forbidden features. Models share the same holdout.</p>
+<p>These models have been compared using this holdout, so it is development evidence rather than an untouched final test. The table reports observed point estimates, without confidence intervals.</p>
+<div style="overflow-x:auto"><table><thead><tr><th scope="col">Method</th><th scope="col">ROC-AUC</th><th scope="col">Precision@20</th><th scope="col">Precision@50</th></tr></thead><tbody>
+<tr><td>Baseline</td><td>0.646</td><td>0.400</td><td>0.420</td></tr>
+<tr><td>Logistic Regression</td><td>0.700</td><td>0.350</td><td>0.400</td></tr>
+<tr><td>Decision Tree</td><td>0.742</td><td>0.650</td><td>0.660</td></tr>
+<tr><td>Random Forest</td><td>0.747</td><td>0.700</td><td>0.680</td></tr>
+</tbody></table></div>
+<h2>Actually executed split sensitivity</h2>
+<p>For each split seed, refit the Random Forest with its model seed fixed at 42. Recompute metrics against that split’s baseline and base rate. These three chosen splits are a sensitivity check, not a confidence interval or evidence that every unseen client will benefit.</p>
+<div style="overflow-x:auto"><table><thead><tr><th scope="col">Split seed</th><th scope="col">Test pages</th><th scope="col">Base rate</th><th scope="col">RF P@50</th><th scope="col">Baseline P@50</th></tr></thead><tbody>
+<tr><td>42</td><td>2325</td><td>0.391</td><td>0.680</td><td>0.420</td></tr>
+<tr><td>7</td><td>4280</td><td>0.611</td><td>0.840</td><td>0.760</td></tr>
+<tr><td>123</td><td>3090</td><td>0.549</td><td>0.980</td><td>0.980</td></tr>
+</tbody></table></div>
+<h2>Interpretation</h2>
+<p>In the canonical holdout, 34 of the top 50 pages carry the declining label; 16 do not. This is a measured label count, not a forecast of time saved or traffic recovered.</p>
+<p>The following impurity-based feature importances describe the fitted forest. Correlated features and high-cardinality inputs can affect these values; they do not establish causes or the direction of effects.</p>
+<div style="overflow-x:auto"><table><thead><tr><th scope="col">Feature</th><th scope="col">Importance</th></tr></thead><tbody>
+<tr><td>log_impressions_90d</td><td>0.1318</td></tr>
+<tr><td>days_with_impressions</td><td>0.1305</td></tr>
+<tr><td>avg_position</td><td>0.1108</td></tr>
+<tr><td>content_age_days</td><td>0.0908</td></tr>
+<tr><td>age_tier_365+</td><td>0.0376</td></tr>
+<tr><td>word_count</td><td>0.0370</td></tr>
+<tr><td>log_clicks_90d</td><td>0.0366</td></tr>
+<tr><td>char_count</td><td>0.0362</td></tr>
+<tr><td>days_with_sessions</td><td>0.0348</td></tr>
+<tr><td>ctr</td><td>0.0342</td></tr>
+</tbody></table></div>
+<h2>Practical use and limitations</h2>
+<p>The local demonstration queue includes training pages, and its action rules use the observed trend label. It is not validation evidence. Review the trend in the source analytics before deciding whether any content needs work.</p>
+<p>The 90-day aggregates overlap the window used to define decline. Client grouping does not remove this temporal overlap. A future-prediction claim requires non-overlapping outcome windows.</p>
+<p>Only six clients are held out in the canonical split; client mix can materially change results. Full-snapshot preprocessing also limits claims about completely unseen data.</p>
+<p>Next experiment: fit preprocessing only on training clients, evaluate on future non-overlapping outcomes and reserve a new untouched set after model selection. Earlier weekly notebooks and supplied starter outputs are historical experiments, not the canonical capstone results.</p>
+<h2>Reproduce and audit</h2>
+<p>Executed with Python 3.14.0. Exact package versions are recorded in requirements-capstone.lock.txt; input and code hashes are in work/outputs/capstone_model_metrics.json. The notebook generates this page and work/capstone_report.md from that same JSON. Numerical results can change with library versions.</p>
+<pre>python3.14 -m venv .venv
+.venv/bin/pip install -r requirements-capstone.lock.txt
+.venv/bin/python scripts/run_capstone.py</pre>
+<h2>Acknowledgments and data credit</h2>
+<p>Dataset and starter foundation courtesy of FlyRank. Original starter scripts and teaching materials remain credited to their contributors.</p>
+<p><a href="https://flyrank.ai">FlyRank</a> · <a href="https://github.com/Prajwal-Rd-bond/flyrank-ml-internship-starter/blob/main/work/notebooks/capstone.ipynb">Executed notebook</a> · <a href="https://github.com/Prajwal-Rd-bond/flyrank-ml-internship-starter/blob/main/work/outputs/capstone_model_metrics.json">Aggregate metrics</a></p>
 </div>
-
-<div class="metric-cards">
-    <div class="metric-card"><div class="value">30,000</div><div class="label">Pages scored</div></div>
-    <div class="metric-card"><div class="value">0.740</div><div class="label">Precision@50 (model)</div></div>
-    <div class="metric-card"><div class="value">3×</div><div class="label">Lift over baseline</div></div>
-    <div class="metric-card"><div class="value">0.750</div><div class="label">ROC AUC</div></div>
-    <div class="metric-card"><div class="value">3,605</div><div class="label">High-confidence pages</div></div>
-    <div class="metric-card"><div class="value">32</div><div class="label">Anonymized clients</div></div>
-</div>
-
-<h2>1. Problem Framing</h2>
-<p><strong>Decision:</strong> which pages a content editor should open and review first this week, out of everything a client owns.</p>
-<p><strong>Unit of analysis:</strong> one content page (<code>content_id</code>), aggregated over a trailing 90-day window.</p>
-<p>The median client has <strong>567 pages</strong>. At 50 reviews per week, that's 11+ weeks to review everything once — prioritization order is not optional, it's the whole game. A false positive wastes an editor's time on a page that didn't need attention; a false negative lets a real decliner slip through silently.</p>
-<p><strong>Why ML helps:</strong> a fixed rule uses only 2–3 signals. A learned model combines 18 numeric and 8 categorical features with interactions a hand-rule can't express, tripling the precision at the top of the queue.</p>
-
-<h2>2. Data Safety</h2>
-<p><strong>Dataset:</strong> <code>content_refresh_anonymized.csv</code> — 30,000 rows × 44 columns, 32 pseudonymized clients. All identifiers are scrambled. No client names, domains, URLs, titles, or keywords appear anywhere.</p>
-<p><strong>Excluded from features:</strong></p>
-<ul>
-    <li><code>trend_direction</code> and <code>trend_pct</code> — label source; including either causes 100% leakage</li>
-    <li>Sub-window columns (<code>impressions_last_30d</code>, etc.) — construct the label</li>
-    <li><code>provider_used</code>, <code>model_used</code> — authoring details</li>
-    <li><code>content_id</code>, <code>client_id</code> — grouping only, never features</li>
-</ul>
-<div class="warning">
-    <strong>Rate columns are ×100 percentages:</strong> <code>ctr = 0.76</code> means 0.76%, not 76%.
-    <code>avg_position = 0</code> means missing data (1,205 rows), not position zero.
-</div>
-
-<h2>3. Baseline</h2>
-<p>The transparent hand-rule baseline score:</p>
-<pre>baseline_refresh_score =
-  0.40 × visibility_score
-+ 0.30 × freshness_risk_score
-+ 0.25 × position_opportunity_score
-+ 0.05 × depth_gap_score</pre>
-<p>Reason codes: <code>stale_visible_page</code>, <code>declining_with_demand</code>, <code>thin_visible_page</code>, <code>page_one_decay_risk</code>, <code>low_ctr_visible_page</code>, <code>low_engagement_visible_page</code>.</p>
-<p>On the client-holdout test set: <strong>Precision@50 = 0.240</strong>, ROC AUC = 0.627.</p>
-
-<h2>4. Model / Analysis</h2>
-<p>Three classifiers compared: Logistic Regression, Decision Tree (depth 5), and Random Forest (depth 10, 200 trees). All use <code>class_weight="balanced"</code> and <code>random_state=42</code>.</p>
-
-<h3>Features</h3>
-<p><strong>18 numeric:</strong> search_volume, competition, cpc, word_count, char_count, log_impressions_90d, log_clicks_90d, log_sessions_90d, log_ai_sessions_90d, days_with_impressions, days_with_sessions, content_age_days, days_since_last_update, ctr, avg_position, engagement_rate, scroll_rate, ai_traffic_pct.</p>
-<p><strong>8 categorical</strong> (one-hot encoded to 52 total): competition_level, content_type, main_intent, age_tier, freshness_tier, word_count_tier, impression_tier, position_tier.</p>
-<p><strong>Target:</strong> <code>is_declining_label = (trend_direction == "down")</code> — a proxy label, not a future outcome.</p>
-
-<h2>5. Evaluation</h2>
-<p><strong>Split:</strong> client-holdout — 6 of 32 clients held out entirely. The model is tested on clients it never saw during training.</p>
-
-<table>
-    <thead><tr><th>Model</th><th>ROC AUC</th><th>Avg Precision</th><th>Precision@50</th><th>Recall</th><th>F1</th></tr></thead>
-    <tbody>
-        <tr><td><strong>random_forest</strong></td><td>0.750</td><td>0.618</td><td class="highlight">0.740</td><td>0.744</td><td>0.640</td></tr>
-        <tr><td>decision_tree</td><td>0.742</td><td>0.575</td><td>0.540</td><td>0.716</td><td>0.634</td></tr>
-        <tr><td>logistic_regression</td><td>0.700</td><td>0.522</td><td>0.400</td><td>0.567</td><td>0.566</td></tr>
-        <tr><td>baseline_rules</td><td>0.627</td><td>0.468</td><td>0.240</td><td>—</td><td>—</td></tr>
-    </tbody>
-</table>
-
-<p><strong>Error analysis:</strong> of the top 50 model candidates, 13 were false positives — typically pages with very low impressions or missing position data. The worst false negatives were high-visibility declining pages with strong engagement signals that masked the impression decline.</p>
-
-<h2>6. Interpretation</h2>
-<h3>Top Features (Random Forest Importance)</h3>
-<table>
-    <thead><tr><th>Rank</th><th>Feature</th><th>Importance</th><th>Interpretation</th></tr></thead>
-    <tbody>
-        <tr><td>1</td><td><code>days_with_impressions</code></td><td>0.158</td><td>How consistently a page appeared in search</td></tr>
-        <tr><td>2</td><td><code>log_impressions_90d</code></td><td>0.128</td><td>Total search visibility (log-scaled)</td></tr>
-        <tr><td>3</td><td><code>avg_position</code></td><td>0.109</td><td>Search ranking position</td></tr>
-        <tr><td>4</td><td><code>content_age_days</code></td><td>0.095</td><td>Page age</td></tr>
-        <tr><td>5</td><td><code>char_count</code></td><td>0.043</td><td>Content length</td></tr>
-        <tr><td>6</td><td><code>word_count</code></td><td>0.040</td><td>Content length</td></tr>
-        <tr><td>7</td><td><code>log_clicks_90d</code></td><td>0.035</td><td>Click volume</td></tr>
-        <tr><td>8</td><td><code>ctr</code></td><td>0.033</td><td>Click-through rate</td></tr>
-        <tr><td>9</td><td><code>scroll_rate</code></td><td>0.031</td><td>User engagement depth</td></tr>
-        <tr><td>10</td><td><code>days_with_sessions</code></td><td>0.028</td><td>Session consistency</td></tr>
-    </tbody>
-</table>
-<p><strong>Surprise:</strong> <code>search_volume</code> ranked 20th — keyword demand barely predicts actual page performance (r ≈ 0.001).</p>
-
-<h2>7. Recommendations</h2>
-<div class="metric-cards">
-    <div class="metric-card"><div class="value">3,605</div><div class="label">High confidence — review now</div></div>
-    <div class="metric-card"><div class="value">11,395</div><div class="label">Medium — if capacity permits</div></div>
-    <div class="metric-card"><div class="value">15,000</div><div class="label">Low — monitor only</div></div>
-</div>
-
-<table>
-    <thead><tr><th>Action</th><th>Count</th><th>Description</th></tr></thead>
-    <tbody>
-        <tr><td><code>monitor</code></td><td>13,093</td><td>No immediate action needed</td></tr>
-        <tr><td><code>refresh</code></td><td>8,178</td><td>Update content for staleness/decline</td></tr>
-        <tr><td><code>refresh_and_review_ctr</code></td><td>6,657</td><td>Refresh + review title/meta for CTR</td></tr>
-        <tr><td><code>refresh_and_review_engagement</code></td><td>1,990</td><td>Address engagement signals</td></tr>
-        <tr><td><code>expand_and_refresh</code></td><td>82</td><td>Thin content needs expansion</td></tr>
-    </tbody>
-</table>
-
-<div class="warning">
-    <strong>This is decision-support, not a verdict.</strong> Every recommendation should be verified by a human editor before action. The model cannot guarantee that refreshing a flagged page will reverse its decline.
-</div>
-
-<h2>8. Limitations</h2>
-<ol>
-    <li><strong>Proxy label:</strong> "down" is defined by a >20% impression drop threshold, not by editorial judgment or future recovery</li>
-    <li><strong>No causal claims:</strong> we cannot say refreshing a flagged page will reverse its decline</li>
-    <li><strong>Single time window:</strong> results from one 90-day snapshot, not longitudinal</li>
-    <li><strong>Client composition:</strong> 32 clients may not represent all FlyRank clients</li>
-    <li><strong>Metric sensitivity:</strong> Precision@50 varies with client-holdout random seed</li>
-    <li><strong>No text features:</strong> the model sees metrics and tiers, not page content</li>
-</ol>
-
-<h2>9. Reproducibility</h2>
-<pre>git clone https://github.com/Prajwal-Rd-bond/flyrank-ml-internship-starter.git
-cd flyrank-ml-internship-starter
-pip install -r requirements.txt
-python scripts/run_all.py</pre>
-<p>Random seed: <code>42</code>. Pipeline runs in ~1 minute. All numbers match a fresh re-run.</p>
-
-</div>
-
-<footer>
-    <p>Built on the <a href="https://flyrank.ai">FlyRank</a> ML Internship dataset.
-    Track leads: Mirza Ašćerić (ML) · Hole (data engineering). Code under MIT license.</p>
-    <p>© 2026 Prajwal — FlyRank ML Internship</p>
-</footer>
-
 </body>
 </html>

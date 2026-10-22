@@ -7,9 +7,9 @@
   "test_base_rate": 0.391,
   "label_base_rate_full": 0.542,
   "random_forest": {
-    "roc_auc": 0.75,
-    "precision_at_20": 0.65,
-    "precision_at_50": 0.74
+    "roc_auc": 0.747,
+    "precision_at_20": 0.7,
+    "precision_at_50": 0.68
   },
   "decision_tree": {
     "roc_auc": 0.742,
@@ -25,5 +25,113 @@
     "roc_auc": 0.646,
     "precision_at_20": 0.4,
     "precision_at_50": 0.42
+  },
+  "seed_sensitivity": [
+    {
+      "split_seed": 42,
+      "test_rows": 2325,
+      "test_base_rate": 0.391,
+      "rf_precision_at_50": 0.68,
+      "baseline_precision_at_50": 0.42
+    },
+    {
+      "split_seed": 7,
+      "test_rows": 4280,
+      "test_base_rate": 0.611,
+      "rf_precision_at_50": 0.84,
+      "baseline_precision_at_50": 0.76
+    },
+    {
+      "split_seed": 123,
+      "test_rows": 3090,
+      "test_base_rate": 0.549,
+      "rf_precision_at_50": 0.98,
+      "baseline_precision_at_50": 0.98
+    }
+  ],
+  "provenance": {
+    "dataset_sha256": "c43bdac4eccfa17fcd8a33974fe36f2c998c03a3ae3af8d80cf712abab5d6396",
+    "feature_code_sha256": "d717797eb360f88ccdeb30e893ec10b8058a34fde166b7061934ef8dc0ae5e73",
+    "notebook_code_sha256": "a34a3eed323549472969625615f43c2da25ce2807654c8b310341f30cf93e823",
+    "python": "3.14.0",
+    "packages": {
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1"
+    },
+    "rf_parameters": {
+      "bootstrap": true,
+      "ccp_alpha": 0.0,
+      "class_weight": "balanced_subsample",
+      "criterion": "gini",
+      "max_depth": 10,
+      "max_features": "sqrt",
+      "max_leaf_nodes": null,
+      "max_samples": null,
+      "min_impurity_decrease": 0.0,
+      "min_samples_leaf": 25,
+      "min_samples_split": 2,
+      "min_weight_fraction_leaf": 0.0,
+      "monotonic_cst": null,
+      "n_estimators": 200,
+      "n_jobs": -1,
+      "oob_score": false,
+      "random_state": 42,
+      "verbose": 0,
+      "warm_start": false
+    },
+    "preprocessing": "Full-snapshot category discovery, baseline percentile ranks and CTR medians; numeric missing values filled with zero.",
+    "ranking": "Descending numpy.argsort, default tie ordering; pinned NumPy version.",
+    "scope": "Exploratory current-state proxy; overlapping windows; not a sealed or prospective evaluation."
+  },
+  "feature_importance": [
+    {
+      "feature": "log_impressions_90d",
+      "importance": 0.1318
+    },
+    {
+      "feature": "days_with_impressions",
+      "importance": 0.1305
+    },
+    {
+      "feature": "avg_position",
+      "importance": 0.1108
+    },
+    {
+      "feature": "content_age_days",
+      "importance": 0.0908
+    },
+    {
+      "feature": "age_tier_365+",
+      "importance": 0.0376
+    },
+    {
+      "feature": "word_count",
+      "importance": 0.037
+    },
+    {
+      "feature": "log_clicks_90d",
+      "importance": 0.0366
+    },
+    {
+      "feature": "char_count",
+      "importance": 0.0362
+    },
+    {
+      "feature": "days_with_sessions",
+      "importance": 0.0348
+    },
+    {
+      "feature": "ctr",
+      "importance": 0.0342
+    }
+  ],
+  "label_distribution": {
+    "down": 16262,
+    "stable": 5962,
+    "up": 4388,
+    "new": 2236,
+    "flat": 1152
   }
 }
