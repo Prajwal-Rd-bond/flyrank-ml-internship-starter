@@ -2,7 +2,21 @@
 
 Prajwal Ravi Devadiga · FlyRank ML Internship
 
-## Measured result
+## Latest verified Colab execution — 23 October 2026
+
+Selected gradient boosting: P@50 96% (48/50), P@20 100% (20/20), ROC-AUC 0.766; mean development CV P@50 80%.
+
+Exploratory current-state decline ranking. Six clients and 2325 rows in the previously used seed-42 holdout; base rate 39.1%. 90-day features overlap the label window. Not a sealed future-outcome test. Model selected using four grouped folds on development clients only.
+
+Colab used Python 3.13.16, NumPy 2.1.3, pandas 2.2.3, scikit-learn 1.6.1 and SciPy 1.16.3. The original capstone forest scored 74% P@50 against its 42% baseline in Colab. The sections below retain the pinned local reproduction, whose versions and scores differ. Evidence: work/outputs/colab_results.json and work/colab/.
+
+| Colab training-only method | P@50 | P@20 | ROC-AUC |
+| --- | --- | --- | --- |
+| rule_baseline | 0.360 | 0.400 | 0.620 |
+| forest_reference | 0.760 | 0.750 | 0.750 |
+| boosting_small | 0.960 | 1.000 | 0.766 |
+
+## Pinned local reproduction
 
 Random Forest Precision@50 is 68%, versus 42% for the baseline (26 percentage points higher). The seed-42 holdout contains 2,325 pages from 6 clients, with a declining-label base rate of 39.1%.
 
