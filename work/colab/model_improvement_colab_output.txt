@@ -1,0 +1,33 @@
+forest_reference 0.775
+forest_deeper 0.78
+extra_trees 0.745
+boosting_small 0.8
+boosting_features 0.79
+boosting_deeper 0.73
+Selected: boosting_small
+{
+  "rule_baseline": {
+    "precision_at_20": 0.4,
+    "precision_at_50": 0.36,
+    "roc_auc": 0.6196280291870994,
+    "average_precision": 0.46586662662065503,
+    "base_rate": 0.3909677419354839,
+    "rows": 2325
+  },
+  "forest_reference": {
+    "precision_at_20": 0.75,
+    "precision_at_50": 0.76,
+    "roc_auc": 0.7502629853380818,
+    "average_precision": 0.6179461453209378,
+    "base_rate": 0.3909677419354839,
+    "rows": 2325
+  },
+  "boosting_small": {
+    "precision_at_20": 1.0,
+    "precision_at_50": 0.96,
+    "roc_auc": 0.7659593642980117,
+    "average_precision": 0.6737532278371173,
+    "base_rate": 0.3909677419354839,
+    "rows": 2325
+  }
+}

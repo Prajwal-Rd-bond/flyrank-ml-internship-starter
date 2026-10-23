@@ -1,0 +1,34 @@
+[
+  {
+    "cell": 1,
+    "text": "Python: 3.13.16\nnumpy 2.1.3\npandas 2.2.3\nscikit-learn 1.6.1\nscipy 1.16.3\nPublic starter data verified against local SHA-256.\n"
+  },
+  {
+    "cell": 5,
+    "text": "Dataset: 30000 pages | 32 clients | declining base rate: 54.2%\nEditor capacity context: median client has 567 pages → ~11.3 weeks to review at 50/week\n"
+  },
+  {
+    "cell": 7,
+    "text": "Data contract verification:\n  Total rows after filtering:       30000\n  Duplicate content_ids removed:        0\n  Pages with impressions_90d > 0:   30000 (100.0%)\n  Pages with content_age_days >= 90: 30000 (100.0%)\n\nExcluded leakage columns in model features: 0  ✓\nLabel base rate: 54.2%  (16262 declining of 30000)\n\nClient size distribution:\n  min:    3 pages | median:  567 | max: 7008\n  32 distinct pseudonymised clients\n"
+  },
+  {
+    "cell": 9,
+    "text": "Model training complete.\n  Train rows: 27675 (26 clients)\n  Test rows:  2325  (6 holdout clients)\n  Test base rate: 0.391\n  Feature columns: 52\n"
+  },
+  {
+    "cell": 11,
+    "text": "Results on client-grouped holdout (seed=42, 2325 test rows, base rate=0.391)\n\nmethod                         ROC-AUC    P@20    P@50  lift_vs_baseline\n-----------------------------------------------------------------------\nbaseline_action_score            0.646   0.400   0.420                --\nlogistic_regression              0.700   0.350   0.400            -0.020\ndecision_tree (d=5)              0.742   0.500   0.560            +0.140\nrandom_forest                    0.750   0.650   0.740            +0.320\n\nTest base rate (floor):        0.391\nSeed-42 is the canonical reported number for this repo.\n"
+  },
+  {
+    "cell": 13,
+    "text": " split_seed  test_rows  test_base_rate  rf_precision_at_50  baseline_precision_at_50\n         42       2325           0.391                0.74                      0.42\n          7       4280           0.611                0.86                      0.76\n        123       3090           0.549                0.98                      0.98\n"
+  },
+  {
+    "cell": 15,
+    "text": "Demonstration queue summary (includes training rows):\n  action                    count     pct  declining_rate_in_action\n  expand_and_refresh            9   0.0%       0.222\n  monitor                   13934  46.4%       0.223\n  refresh                    7655  25.5%       0.999\n  refresh_and_review_ctr     8402  28.0%       0.655\n"
+  },
+  {
+    "cell": 17,
+    "text": "Generated aggregate metrics, Markdown report, public paper and README status.\n"
+  }
+]
