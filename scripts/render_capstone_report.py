@@ -32,7 +32,17 @@ def render(root):
             body.append('<tr>'+''.join('<td>'+html.escape(str(v))+'</td>' for v in row)+'</tr>')
         body.append('</tbody></table></div>')
 
-    section('Measured result', [summary, 'This exploratory study ranks pages by observed impression decline. It does not predict future traffic or demonstrate that refreshing a page improves its performance.'])
+    colab_path = root / 'work/outputs/colab_results.json'
+    if colab_path.exists():
+        c = json.loads(colab_path.read_text())
+        selected = c['historical_holdout'][c['selected_model']]
+        section('Latest verified Colab execution — 23 October 2026', [
+            f"Selected gradient boosting: P@50 {selected['precision_at_50']:.0%} (48/50), P@20 {selected['precision_at_20']:.0%} (20/20), ROC-AUC {selected['roc_auc']:.3f}; mean development CV P@50 {c['development_cv_mean_precision_at_50'][c['selected_model']]:.0%}.",
+            c['scope'],
+            'Colab used Python 3.13.16, NumPy 2.1.3, pandas 2.2.3, scikit-learn 1.6.1 and SciPy 1.16.3. The original capstone forest scored 74% P@50 against its 42% baseline in Colab. The sections below retain the pinned local reproduction, whose versions and scores differ. Evidence: work/outputs/colab_results.json and work/colab/.'])
+        table(['Colab training-only method', 'P@50', 'P@20', 'ROC-AUC'], [[name, f"{v['precision_at_50']:.3f}", f"{v['precision_at_20']:.3f}", f"{v['roc_auc']:.3f}"] for name, v in c['historical_holdout'].items()])
+
+    section('Pinned local reproduction', [summary, 'This exploratory study ranks pages by observed impression decline. It does not predict future traffic or demonstrate that refreshing a page improves its performance.'])
     section('Question and data', [
         'Can content and search signals help an editor prioritise a hypothetical budget of 50 page reviews? Precision@50 measures how many selected pages carry the observed declining label.',
         f"The bundled FlyRank sample contains {sum(m['label_distribution'].values()):,} retained pages across {m['n_clients_total']} pseudonymous clients. Keep pages with positive 90-day impressions and content age of at least 90 days; deduplicate content IDs. The target is trend_direction == down.",
@@ -70,8 +80,8 @@ def render(root):
     head=page.read_text().split('<body>')[0]
     page.write_text(head+'<body>\n<div class="container">\n'+'\n'.join(body)+'\n</div>\n</body>\n</html>\n')
     readme=root/'README.md'
-    status='**Evaluation status:** '+summary+' Regenerate the notebook, metrics and reports with `python scripts/run_capstone.py` using the pinned capstone environment. These are exploratory current-state results with overlapping windows and full-snapshot preprocessing; see the report for limitations.'
-    readme.write_text(re.sub(r'^\*\*Evaluation status:\*\*.*$',lambda _:status,readme.read_text(),flags=re.M))
+    status='**Pinned local reproduction:** '+summary+' Regenerate the notebook, metrics and reports with `python scripts/run_capstone.py` using the pinned capstone environment. These are exploratory current-state results with overlapping windows and full-snapshot preprocessing; see the report for limitations.'
+    readme.write_text(re.sub(r'^\*\*(?:Evaluation status|Pinned local reproduction):\*\*.*$',lambda _:status,readme.read_text(),flags=re.M))
 
 
 if __name__ == '__main__':
