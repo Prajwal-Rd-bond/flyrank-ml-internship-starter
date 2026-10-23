@@ -98,7 +98,16 @@
 <body>
 <div class="container">
 <h1>Content refresh prioritisation</h1><p class="author">Prajwal Ravi Devadiga · FlyRank ML Internship</p>
-<h2>Measured result</h2>
+<h2>Latest verified Colab execution — 23 October 2026</h2>
+<p>Selected gradient boosting: P@50 96% (48/50), P@20 100% (20/20), ROC-AUC 0.766; mean development CV P@50 80%.</p>
+<p>Exploratory current-state decline ranking. Six clients and 2325 rows in the previously used seed-42 holdout; base rate 39.1%. 90-day features overlap the label window. Not a sealed future-outcome test. Model selected using four grouped folds on development clients only.</p>
+<p>Colab used Python 3.13.16, NumPy 2.1.3, pandas 2.2.3, scikit-learn 1.6.1 and SciPy 1.16.3. The original capstone forest scored 74% P@50 against its 42% baseline in Colab. The sections below retain the pinned local reproduction, whose versions and scores differ. Evidence: work/outputs/colab_results.json and work/colab/.</p>
+<div style="overflow-x:auto"><table><thead><tr><th scope="col">Colab training-only method</th><th scope="col">P@50</th><th scope="col">P@20</th><th scope="col">ROC-AUC</th></tr></thead><tbody>
+<tr><td>rule_baseline</td><td>0.360</td><td>0.400</td><td>0.620</td></tr>
+<tr><td>forest_reference</td><td>0.760</td><td>0.750</td><td>0.750</td></tr>
+<tr><td>boosting_small</td><td>0.960</td><td>1.000</td><td>0.766</td></tr>
+</tbody></table></div>
+<h2>Pinned local reproduction</h2>
 <p>Random Forest Precision@50 is 68%, versus 42% for the baseline (26 percentage points higher). The seed-42 holdout contains 2,325 pages from 6 clients, with a declining-label base rate of 39.1%.</p>
 <p>This exploratory study ranks pages by observed impression decline. It does not predict future traffic or demonstrate that refreshing a page improves its performance.</p>
 <h2>Question and data</h2>

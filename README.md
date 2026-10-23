@@ -6,6 +6,14 @@ A capstone exploring how search-performance signals can help content editors dec
 
 [Capstone report](work/capstone_report.md) · [Capstone notebook](work/notebooks/capstone.ipynb) · [Validation audit](work/notebooks/w06_validation_audit.ipynb) · [Action playbook](work/notebooks/w07_action_playbook.ipynb)
 
+## Latest verified Colab results — 23 October 2026
+
+In the completed Colab run, the selected gradient-boosting model reached **96% Precision@50** (48/50) and **100% Precision@20** (20/20); mean development cross-validation Precision@50 was **80%**. On the same historical holdout, the training-only forest scored 76% P@50 and the training-only rule baseline 36%. The original capstone forest scored 74% against its separate 42% baseline.
+
+The holdout contains 2,325 pages from six clients (39.1% declining-label base rate). It has been used in earlier experiments and is not sealed; overlapping feature/label windows limit this to exploratory current-state ranking. Colab library versions differ from the pinned local environment, whose scores remain preserved as historical results.
+
+[Colab results and provenance](work/outputs/colab_results.json) · [Run evidence and launch copies](work/colab/README.md)
+
 ## Start with the evidence
 
 | What to review | Where to look |
@@ -19,7 +27,7 @@ A capstone exploring how search-performance signals can help content editors dec
 
 The capstone compares Logistic Regression, Decision Tree and Random Forest models with a rule-based baseline. It uses a client-grouped holdout to evaluate ranking pages for human review. The label describes decline within an observed window; it does not establish future traffic recovery or the causal effect of refreshing content.
 
-**Evaluation status:** Random Forest Precision@50 is 68%, versus 42% for the baseline (26 percentage points higher). The seed-42 holdout contains 2,325 pages from 6 clients, with a declining-label base rate of 39.1%. Regenerate the notebook, metrics and reports with `python scripts/run_capstone.py` using the pinned capstone environment. These are exploratory current-state results with overlapping windows and full-snapshot preprocessing; see the report for limitations.
+**Pinned local reproduction:** Random Forest Precision@50 is 68%, versus 42% for the baseline (26 percentage points higher). The seed-42 holdout contains 2,325 pages from 6 clients, with a declining-label base rate of 39.1%. Regenerate the notebook, metrics and reports with `python scripts/run_capstone.py` using the pinned capstone environment. These are exploratory current-state results with overlapping windows and full-snapshot preprocessing; see the report for limitations.
 
 ## My work and the starter foundation
 

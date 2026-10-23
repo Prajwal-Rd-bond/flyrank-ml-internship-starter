@@ -34,3 +34,7 @@ __pycache__/
 .venv/
 venv/
 .env
+
+# Locally trained experiment artifacts
+work/models/
+work/outputs/tuning_execution.log
